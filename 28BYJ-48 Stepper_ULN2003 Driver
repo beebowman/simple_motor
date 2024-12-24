@@ -1,0 +1,32 @@
+//Motor: https://www.amazon.com/dp/B0CLYCM1CP?ref=ppx_yo2ov_dt_b_fed_asin_title 
+//Wiring Instructions: https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
+//Wiring: Attach IN1 to pin 8, IN2 to pin 9, IN3 to pin 10, IN4 to pin 11. Attach 5V of Nano to + of baord, and GND of Nano to - of board. 
+//Controller: Arduino Nano 
+//Board: Comes with the stepper motor on Amazon 
+
+
+//Includes the Arduino Stepper Library
+#include <Stepper.h>
+
+// Defines the number of steps per rotation
+const int stepsPerRevolution = 2038;
+
+// Creates an instance of stepper class
+// Pins entered in sequence IN1-IN3-IN2-IN4 for proper step sequence
+Stepper myStepper = Stepper(stepsPerRevolution, 8, 10, 9, 11);
+
+void setup() {
+    // Nothing to do (Stepper Library sets pins as outputs)
+}
+
+void loop() {
+	// Rotate CW slowly at 5 RPM
+	myStepper.setSpeed(5);
+	myStepper.step(stepsPerRevolution);
+	delay(1000);
+	
+	// Rotate CCW quickly at 10 RPM
+	myStepper.setSpeed(10);
+	myStepper.step(-stepsPerRevolution);
+	delay(1000);
+}
