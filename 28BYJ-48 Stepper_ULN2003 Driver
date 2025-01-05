@@ -1,9 +1,17 @@
 //Motor: https://www.amazon.com/dp/B0CLYCM1CP?ref=ppx_yo2ov_dt_b_fed_asin_title 
+//PIR Sensor: https://www.amazon.com/dp/B07RT7MK7C?psc=1&smid=A30QSGOJR8LMXA&ref_=chk_typ_imgToDp
 //Wiring Instructions: https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
-//Wiring: Attach IN1 to pin 8, IN2 to pin 9, IN3 to pin 10, IN4 to pin 11. Attach 5V of Nano to + of baord, and GND of Nano to - of board. 
-//Controller: Arduino Nano 
-//Board: Comes with the stepper motor on Amazon 
+//Wiring: Attach IN1 to pin 8, IN2 to pin 9, IN3 to pin 10, IN4 to pin 11. Attach 5V of Nano to + of board, and GND of Nano to - of board. 
+//Wiring for motion sensor: attach GND of sensor to GND of board, Power of sensor to 3.3V of board, and low/high output of sensor to D13 pin of the Nano board. 
+//PIR Sensor: Make sure to use one that is powered by 3.3V, not 5V. For example, you could get the HiLetgo 3pcs AM312 Mini Pyroelectric PIR Human Sensor Module PIR Infrared IR Sensor Body Manual Motion Infrared IR Detector from Amazon, DC 2.7-12V
+//Motor: Get a mini stepper motor (comes with driver board) that runs on 5V, for example, on Amazon, VKLSVAN 3 Sets 4-Phase 28BYJ-48 DC 5V Stepper Motor + ULN2003 Drive Board Module for Arduino PI PIC and for Raspberry Pi
+//Board: Arduino Nano 
 
+
+
+int inputPin = 13;                // choose the pin for the PIR motion sensor  (used to be 2!)
+int pirState = LOW;             // we start, assuming no motion detected
+int val = 0;                    // variable for reading the pin status
 
 //Includes the Arduino Stepper Library
 #include <Stepper.h>
@@ -16,17 +24,37 @@ const int stepsPerRevolution = 2038;
 Stepper myStepper = Stepper(stepsPerRevolution, 8, 10, 9, 11);
 
 void setup() {
-    // Nothing to do (Stepper Library sets pins as outputs)
+    // Nothing to do for the motor (Stepper Library sets pins as outputs)
+
+    //Code for the motion sensor: 
+  pinMode(inputPin, INPUT);     // declare sensor as input
+ 
+  Serial.begin(9600);
+
 }
 
 void loop() {
-	// Rotate CW slowly at 5 RPM
-	myStepper.setSpeed(5);
-	myStepper.step(stepsPerRevolution);
-	delay(1000);
-	
-	// Rotate CCW quickly at 10 RPM
-	myStepper.setSpeed(10);
-	myStepper.step(-stepsPerRevolution);
-	delay(1000);
+
+  val = digitalRead(inputPin); // read input value from the PIR motion sensor (inputPin)
+  if (val == LOW) { //if the input of the sensor is HIGH (motion detected)
+    	// Rotate CW slowly at 5 RPM
+    myStepper.setSpeed(5);
+    myStepper.step(stepsPerRevolution);
+    delay(1000);
+    
+    // Rotate CCW quickly at 10 RPM
+    //myStepper.setSpeed(10);
+    //myStepper.step(-stepsPerRevolution);
+    //delay(1000);
+
+
+  }
+
+  else {
+
+
+  } 
+
+
+
 }
