@@ -1,4 +1,5 @@
 //Motor: https://www.amazon.com/dp/B0CLYCM1CP?ref=ppx_yo2ov_dt_b_fed_asin_title 
+//(mini stepper motor, 5V DC, model 28BYJ-48) 
 //Wiring Instructions: https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
 //Wiring: Attach IN1 to pin 8, IN2 to pin 9, IN3 to pin 10, IN4 to pin 11. Attach 5V of Nano to + of board, and GND of Nano to - of board. 
 //Wiring for motion sensor: attach GND of sensor to GND of board, Power of sensor to 3.3V of board, and low/high output of sensor to A2 pin of the Nano board. 
