@@ -1,0 +1,66 @@
+//Motor: https://www.amazon.com/dp/B0CLYCM1CP?ref=ppx_yo2ov_dt_b_fed_asin_title 
+//(mini stepper motor, 5V DC, model 28BYJ-48) 
+//Capacitive touch button (3 wires): https://www.amazon.com/dp/B00HFQEFWQ?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_2 
+//Touch Button Specs: HiLetgo 10pcs TTP223B Capacitive Touch Switch Module Touch Sensor Switch Digital Capacitive Touch Sensor Switch DC 2~5.5V 
+//Wiring Instructions: https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
+//Wiring: Attach IN1 to pin 8, IN2 to pin 9, IN3 to pin 10, IN4 to pin 11. Attach 5V of Nano to + of board, and GND of Nano to - of board. 
+//Wiring for motion sensor: attach GND of capacitive touch button to GND of board, VCC of touch button to 3.3V of board, and SIG of touch button to A2 pin of the Nano board. 
+//Board: Arduino Nano 
+
+
+int inputPin = A2;                // choose the pin for the capacitive touch sensor  (used to be 2!)
+int touchState = LOW;             // we start, assuming no touch detected
+int val = 0;                    // variable for reading the pin status
+
+
+//Includes the Arduino Stepper Library
+#include <Stepper.h>;
+
+// Defines the number of steps per rotation
+const int stepsPerRevolution = 750; //number of rotations, where 1 rotation is 2038
+
+// Creates an instance of stepper class
+// Pins entered in sequence IN1-IN3-IN2-IN4 for proper step sequence
+Stepper myStepper = Stepper(stepsPerRevolution, 8, 10, 9, 11);
+//8, 10, 9, 11
+
+void setup() {
+    // Nothing to do for the motor (Stepper Library sets pins as outputs)
+
+    //Code for the motion sensor: 
+  pinMode(inputPin, INPUT);     // declare sensor as input
+ 
+  Serial.begin(9600);
+
+}
+
+void loop() {
+
+  if (digitalRead(inputPin) == HIGH) { //if the input of the sensor is HIGH (motion detected)
+    	 //Rotate CW slowly at 5 RPM
+    Serial.println("Touch button pressed!");
+    myStepper.setSpeed(7);
+    myStepper.step(-stepsPerRevolution);
+    delay(.5);
+
+
+   myStepper.setSpeed(7);
+    myStepper.step(stepsPerRevolution);
+    delay(.5);
+
+  }
+
+  else  {
+
+    delay(1);
+    //Rotate CCW quickly at 5 RPM
+    //myStepper.setSpeed(20);
+    //myStepper.step(-stepsPerRevolution);
+    //delay(3);
+
+
+  } 
+  
+
+
+}
