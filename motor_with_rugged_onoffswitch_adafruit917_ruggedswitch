@@ -1,0 +1,53 @@
+//Motor: https://www.amazon.com/dp/B0CLYCM1CP?ref=ppx_yo2ov_dt_b_fed_asin_title 
+//(mini stepper motor, 5V DC, model 28BYJ-48) 
+//Wiring Instructions: https://lastminuteengineers.com/28byj48-stepper-motor-arduino-tutorial/
+//Wiring: Attach IN1 to pin 8, IN2 to pin 9, IN3 to pin 10, IN4 to pin 11. Attach 5V of Nano to + of board, and GND of Nano to - of board. 
+//Wiring for the rugged metal on/off switch (adafruit product 917):
+    // Attach C1 (common) of switch to pin A2 of the arduino Nano. Attach NO1 (normally open) to GND of the arduino Nano. 
+//Board: Arduino Nano 
+
+//This code can be used to rotate a yellow sun (attached to a motor) behind a cloud!  
+
+
+// Pin configuration for Rugged ON/OFF Adafruit Switch Button
+int switchPin = A2;                // Input pin for the switch
+int switchState = HIGH;            // Start with the assumption that the switch is OFF (HIGH due to pull-up)
+
+// Includes the Arduino Stepper Library
+#include <Stepper.h>;
+
+// Defines the number of steps per rotation
+const int stepsPerRevolution = 750; // number of steps for 1 full revolution
+
+// Creates an instance of the stepper class
+Stepper myStepper = Stepper(stepsPerRevolution, 8, 10, 9, 11);  // Stepper motor pins
+
+void setup() {
+    pinMode(switchPin, INPUT_PULLUP);  // Set switch pin to input with pull-up resistor
+
+    Serial.begin(9600);  // Initialize serial communication for debugging
+}
+
+void loop() {
+    // Read the state of the switch (pin A2)
+    int rawState = digitalRead(switchPin);
+
+    // Print the raw state (0 = pressed, 1 = not pressed)
+    Serial.print("Raw switchState: ");
+    Serial.println(rawState);
+
+    // Check the state of the switch and print the appropriate message
+    if (rawState == LOW) {  // LOW means button is pressed
+        Serial.println("Switch is ON");
+
+        myStepper.setSpeed(7);
+        myStepper.step(-stepsPerRevolution);
+        delay(.5);
+
+        
+    } else {  // HIGH means button is unpressed
+        Serial.println("Switch is OFF");
+    }
+
+    delay(200);  // Add a small delay to make serial output readable
+}
